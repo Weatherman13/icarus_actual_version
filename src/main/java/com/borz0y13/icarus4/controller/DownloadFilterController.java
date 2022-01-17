@@ -3,6 +3,7 @@ package com.borz0y13.icarus4.controller;
 import com.borz0y13.icarus4.entity.pojo.Scene;
 import com.borz0y13.icarus4.entity.pojo.filters.Filter;
 import com.borz0y13.icarus4.service.controller.HttpRequestCreator;
+import com.borz0y13.icarus4.service.controller.LogicWithControllers;
 import com.borz0y13.icarus4.service.dao.SatelliteServiceImpl;
 import com.borz0y13.icarus4.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,10 +40,7 @@ public class DownloadFilterController {
     SatelliteServiceImpl satelliteServiceRepository;
 
     @Autowired
-    Utils utils;
-
-    @Autowired
-    HttpRequestCreator requestCreator;
+    LogicWithControllers logic;
 
     @GetMapping("/satellites-library/filter/{idOfSatellite}")
     public String returnViewForFilter(@PathVariable("idOfSatellite") int idOfSatellite,
@@ -62,45 +60,10 @@ public class DownloadFilterController {
 
         if (bindingResult.hasErrors()) return "filterView";
 
+//        log.debug(String.valueOf(response.statusCode()));
 
-
-        HttpResponse<String> response = requestCreator.sendRequestToSearchForScene(filter);
-
-        log.debug(String.valueOf(response.statusCode()));
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        JSONObject obj2 = new JSONObject(response.body());
-
-        JSONArray results = obj2.getJSONObject("data").getJSONArray("results");
-
-
-
-        List<Scene> scenes = new ArrayList<>();
-
-
-        var datasetId = satelliteServiceRepository.getByName(filter.getDatasetName()).getDatasetId();
-
-
-
-        for (int i = 0; i < results.length(); i++) {
-            Scene scene = mapper.readValue(results.get(i).toString(), Scene.class);
-
-
-            if (scene != null) {
-
-                scene.setDatasetId(datasetId);
-
-                scenes.add(scene);
-
-                if (scene.getCloudCover() == null) scene.setCloudCover("does not exist");
-            }
-
-        }
-
-
+        List<Scene> scenes = logic.returnTheListOfScenesByFilter(filter);
         model.addAttribute("scenes", scenes);
-
 
         return "sceneViewAll";
     }
