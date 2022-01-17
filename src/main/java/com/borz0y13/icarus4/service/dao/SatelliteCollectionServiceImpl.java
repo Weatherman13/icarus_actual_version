@@ -1,4 +1,4 @@
-package com.borz0y13.icarus4.service;
+package com.borz0y13.icarus4.service.dao;
 
 import com.borz0y13.icarus4.dao.SatelliteCollectionRepository;
 import com.borz0y13.icarus4.entity.SatelliteCollection;

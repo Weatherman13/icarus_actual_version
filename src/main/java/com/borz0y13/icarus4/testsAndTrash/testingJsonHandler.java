@@ -2,7 +2,7 @@ package com.borz0y13.icarus4.testsAndTrash;
 
 import com.borz0y13.icarus4.entity.pojo.filters.Coordinate;
 import com.borz0y13.icarus4.entity.pojo.filters.Filter;
-import com.borz0y13.icarus4.service.SatelliteServiceImpl;
+import com.borz0y13.icarus4.service.dao.SatelliteServiceImpl;
 import com.borz0y13.icarus4.utils.Utils;
 
 import java.io.IOException;

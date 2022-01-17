@@ -2,7 +2,8 @@ package com.borz0y13.icarus4.controller;
 
 import com.borz0y13.icarus4.entity.pojo.Scene;
 import com.borz0y13.icarus4.entity.pojo.filters.Filter;
-import com.borz0y13.icarus4.service.SatelliteServiceImpl;
+import com.borz0y13.icarus4.service.controller.HttpRequestCreator;
+import com.borz0y13.icarus4.service.dao.SatelliteServiceImpl;
 import com.borz0y13.icarus4.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,9 @@ public class DownloadFilterController {
     @Autowired
     Utils utils;
 
+    @Autowired
+    HttpRequestCreator requestCreator;
+
     @GetMapping("/satellites-library/filter/{idOfSatellite}")
     public String returnViewForFilter(@PathVariable("idOfSatellite") int idOfSatellite,
                                       Model model) {
@@ -58,21 +62,9 @@ public class DownloadFilterController {
 
         if (bindingResult.hasErrors()) return "filterView";
 
-        String filterInJSON = new ObjectMapper().writeValueAsString(filter);
 
-        satelliteServiceRepository.getByName(filter.getDatasetName());
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(urlSceneSearch))
-                .POST(HttpRequest.BodyPublishers.ofString(filterInJSON))
-                .header("Content-Type", "application/json")
-                .header("X-Auth-Token", utils.tokenGenerator().getToken())
-                .build();
-
-        HttpResponse<String> response = HttpClient.newBuilder()
-                .followRedirects(HttpClient.Redirect.ALWAYS)
-                .build()
-                .send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = requestCreator.sendRequestToSearchForScene(filter);
 
         log.debug(String.valueOf(response.statusCode()));
 

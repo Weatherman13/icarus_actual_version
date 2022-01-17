@@ -1,7 +1,7 @@
 package com.borz0y13.icarus4.controller;
 
 import com.borz0y13.icarus4.entity.SatelliteCollection;
-import com.borz0y13.icarus4.service.SatelliteCollectionServiceImpl;
+import com.borz0y13.icarus4.service.dao.SatelliteCollectionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
