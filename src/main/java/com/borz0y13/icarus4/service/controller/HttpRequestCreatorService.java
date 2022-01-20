@@ -3,6 +3,7 @@ package com.borz0y13.icarus4.service.controller;
 import com.borz0y13.icarus4.entity.pojo.filters.Filter;
 import com.borz0y13.icarus4.utils.Utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,15 +13,15 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-
+@Slf4j
 @Component
-public class HttpRequestCreator {
+public class HttpRequestCreatorService {
     private final String urlToSearchForScene = "https://m2m.cr.usgs.gov/api/api/json/stable/scene-search";
 
     @Autowired
     private Utils utils;
 
-    public HttpResponse<String> sendRequestToSearchForScene(Filter filter) throws IOException,
+    public HttpResponse<String> sceneSearch(Filter filter) throws IOException,
             URISyntaxException, InterruptedException {
 
 
@@ -36,6 +37,11 @@ public class HttpRequestCreator {
                 .build()
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
+        log.debug("Scene search completed, code:" + String.valueOf(response.statusCode()));
+
+
         return response;
     }
+
+
 }

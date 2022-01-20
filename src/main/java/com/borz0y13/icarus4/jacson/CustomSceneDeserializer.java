@@ -33,7 +33,7 @@ public class CustomSceneDeserializer extends StdDeserializer<Scene> {
         scene.setDisplayId(sceneNode.get("displayId").textValue());
         scene.setCloudCover(sceneNode.get("cloudCover").textValue());
 
-        log.debug("deserialize is close");
+//        log.debug("deserialize is close");
 
 
 
